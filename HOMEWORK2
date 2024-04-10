@@ -1,8 +1,8 @@
 #include <stdio.h>
 
 int max(int arr[], int n) {
-    int max_so_far = arr[0],num=0;
-    int curr_max = arr[0];
+    int max_ = arr[0],num=0;
+    int curr_ = arr[0];
     for (int i = 0; i < n; i++)
     {
         if (arr[i] < 0)
@@ -11,19 +11,19 @@ int max(int arr[], int n) {
         }
         if (num == n)
         {
-            max_so_far = 0;
-            return max_so_far;
+            max_ = 0;
+            return max_;
         }
     }
 
 
 
     for (int i = 1; i < n; i++) {
-        curr_max = arr[i] > curr_max + arr[i] ? arr[i] : curr_max + arr[i];
-        max_so_far = max_so_far > curr_max ? max_so_far : curr_max;
+        curr_ = arr[i] > curr_ + arr[i] ? arr[i] : curr_ + arr[i];
+        max_r = max_so_far > curr_ ? max_ : curr_;
     }
 
-    return max_so_far;
+    return max_;
 }
 
 int main() {
