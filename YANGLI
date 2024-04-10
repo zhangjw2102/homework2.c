@@ -1,0 +1,8 @@
+TEST_METHOD()
+		{
+			int arr[] = { -2,11,-4,13,-5,-2 };
+			int n = sizeof(arr) / sizeof(arr[0]);
+			int expected = 20;
+			int max_sum = max(arr, n);
+			Assert::AreEqual(expected,max_sum);
+		}
