@@ -1,0 +1,103 @@
+#include <iostream>
+#include <stdlib.h>
+#define maxSize 100
+#define infinity 999
+using namespace std;
+
+typedef struct {
+    // 存放的顶点
+    char vnode[maxSize];
+    // 存放边
+    int edge[maxSize][maxSize];
+    // 顶点和边的数量
+    int n, e;
+} MGraph;
+
+
+
+// 邻接矩阵构造图
+void createMGraph(MGraph& G) {
+    int i, j, k, w, n, e;
+    cout << "请输入图的顶点数和边数" << endl;
+    cin >> G.n >> G.e;
+    n = G.n;
+    e = G.e;
+    cout << "输入顶点" << endl;
+    for (i = 0; i < n; i++) {
+        cin >> G.vnode[i];
+    };
+    for (i = 0; i < n; i++) {
+        for (j = 0; j < n; j++) {
+            G.edge[i][j] = infinity;
+        }
+    };
+    cout << "输入边的下标i,j,重权w" << endl;
+    for (k = 0; k < e; k++) {
+        scanf_s("%d %d %d", &i,& j,& w);
+        G.edge[i][j] = w;
+        G.edge[j][i] = G.edge[i][j];
+    };
+
+}
+
+
+// prim算法求最小生成树
+void minSpanTree_prim(MGraph G) {
+    int i, j, min, k;
+    // 为0表示顶点已加入最小生成树,否则存放其他边的权值
+    int lowcost[maxSize];
+    // 存放顶点下标,标明顶点是新增顶点,还是之前遍历过的顶点
+    int adjvex[maxSize];
+    // 把下标为0的顶点加入到最小生成树
+    lowcost[0] = 0;
+    // 首个节点的下标0    
+    adjvex[0] = 0;
+
+    // 循环0下标顶点与其他顶点的连接情况(不从0开始是因为0 0表示自己和自己的环)
+    for (i = 1; i < G.n; i++) {
+        // 把0下标顶点和其他顶点组成的边的权值存放到lowcost数组中                          
+        lowcost[i] = G.edge[0][i];
+        // 当前lowcost数组中的边的起始顶点全部都是下标为0的顶点,而结束顶点则是lowcost数组中元素下标的顶点
+        adjvex[i] = 0;
+    };
+
+    cout << "最小生成树为:" << endl;
+    // 循环所有顶点,构造最小生成树
+    for (i = 1; i < G.n; i++) {
+        // 初始化min,刚开始为一个不可能的极大值              
+        min = infinity;
+        j = 1;
+        k = 0;
+        // 遍历lowcost数组
+        while (j < G.n) {
+            // 除去已加入最小生成树的顶点
+            if (lowcost[j] != 0 && lowcost[j] < min) {
+                // 找出lowcost数组中最小的权值,并赋值给min                 
+                min = lowcost[j];
+                // 记录最小权值的下标 (这个k其实就是权值最小的那条边的结束顶点)
+                k = j;
+            }
+            j++;
+        };
+        // 打印权值最小的那条边的起始顶点和结束顶点
+        printf("(%d,%d)\n", adjvex[k], k);
+        // 把k下标的顶点加入到最小生成树
+        lowcost[k] = 0;
+        // 遍历顶点                 
+        for (j = 1; j < G.n; j++) {
+            // 除去已加入最小生成树的顶点
+            if (lowcost[j] != 0 && G.edge[k][j] < lowcost[j]) {
+                // 在k结点与其他顶点邻接的权值和lowcost数组中取较小的一方更新lowcost                        
+                lowcost[j] = G.edge[k][j];
+                // 记录较小权值的边的起始顶点下标
+                adjvex[j] = k;
+            }
+        }
+    }
+}
+int main() {
+    MGraph G;
+    createMGraph(G);
+    minSpanTree_prim(G);
+    return 0;
+}
